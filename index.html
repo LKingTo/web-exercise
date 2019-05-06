@@ -4,9 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>web-exercise</title>
+    <style>
+      /* 默认样式重置 */
+      * {margin: 0; padding: 0;}
+      li {list-style: none;}
+      a {text-decoration: none;}
+      img {vertical-align: middle;}
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <router-view></router-view>
+    </div>
     <!-- built files will be auto injected -->
   </body>
+  <script type="text/javascript">
+	  /* 设置rem布局，监听更改字体大小 */
+	  /* rem相关布局[请参考](http://www.jianshu.com/p/65f80d4b44bb) */
+	  (function (win, doc) {
+		  function change () {
+			  doc.documentElement.style.fontSize = doc.documentElement.clientWidth * 20 / 320 + 'px';
+		  }
+		  change();
+		  win.addEventListener('resize', change, false);
+		  win.addEventListener('orientationchange', change, false);
+	  })(window, document)
+  </script>
 </html>
