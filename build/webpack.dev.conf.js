@@ -42,7 +42,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    }
+    },
+	/** 引入mock/index.js，监听http请求 **/
+	before: require('../mock/index.js')
   },
   plugins: [
     new webpack.DefinePlugin({

@@ -15,27 +15,16 @@
 		name: "home",
 		data() {
 			return {
-				list: [
-						{
-							index: 0,
-							question: 'ss',
-							answer: 'ss'
-						},
-						{
-							index: 1,
-							question: 'sss',
-							answer: 'sss'
-						},
-						{
-							index: 2,
-							question: 'ssss',
-							answer: 'ssss'
-						},
-				]
+				list: []
 			}
 		},
 		components: {
 			CommonFooter
+		},
+		mounted() {
+			this.$axios.get('/mock/questions').then((res) => {
+			  this.list = res.data;
+			})
 		}
 	}
 </script>
