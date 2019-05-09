@@ -22,7 +22,8 @@
 			CommonFooter
 		},
 		mounted() {
-			this.$axios.get('/mock/questions').then((res) => {
+			// this.$axios.get('/mock/questions').then((res) => {
+			this.$axios.get('../../mock/questions').then((res) => {
 			  this.list = res.data;
 			})
 		}
