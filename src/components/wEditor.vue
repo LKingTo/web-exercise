@@ -11,7 +11,9 @@
 	import WEditor from 'wangeditor'
 	import utils from '../common/utils'
 
-  export default {
+	export default {
+		editor: null,
+
 		name: "w-editor",
 		data() {
 			return {
@@ -26,26 +28,44 @@
 		methods: {
 			initEditor() {
 				let editor = new WEditor('#' + this.editorId);
-		  	// 自定义菜单配置
-		  	editor.customConfig.menus = [
-				  'head',  // 标题
-				  'bold',  // 粗体
-				  'fontSize',  // 字号
-				  'fontName',  // 字体
-				  'underline',  // 下划线
-				  'foreColor',  // 文字颜色
-				  'backColor',  // 背景颜色
-				  'link',  // 插入链接
-				  'list',  // 列表
-				  'justify',  // 对齐方式
-				  'image',  // 插入图片
-				  'table',  // 表格
-		  	];
-		  editor.customConfig.uploadImgShowBase64 = true;   // 使用 base64 保存图片
-		  	editor.create();
-		  // editor.customConfig.onchange((html) => {
-					// this.editorContent = html;
-				// });
+				editor.customConfig = {
+					menus: [
+						'head',  // 标题
+						'bold',  // 粗体
+						'fontSize',  // 字号
+						'fontName',  // 字体
+						'underline',  // 下划线
+						'foreColor',  // 文字颜色
+						'backColor',  // 背景颜色
+						'link',  // 插入链接
+						'list',  // 列表
+						'justify',  // 对齐方式
+						// 'image',  // 插入图片
+						'table',  // 表格
+					],
+					zIndex: 100,
+					// debug: location.href.indexOf('wangeditor_debug_mode=1') > 0,
+					onchange: (html) => {
+						console.log(html);
+						this.editorContent = html;
+					},
+					onchangeTimeout: 500,  // 单位 ms，默认200ms
+					uploadImgShowBase64: true, // 使用 base64 保存图片
+					showLinkImg: false,	// 隐藏“网络图片”tab
+					// qiniu: true, // 上传图片到七牛云存储
+				};
+				editor.create();
+				this.editor = editor;
+			},
+
+			getContent() {
+				let html = this.editor.txt.html();
+				return html;
+			},
+
+			reset() {
+				// this.editor.txt.html('');
+				this.editor.txt.clear();
 			}
 		}
 	}

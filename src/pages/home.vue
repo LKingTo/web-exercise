@@ -10,6 +10,7 @@
 
 <script>
 	import CommonFooter from '../components/commonFooter'
+	import storageUtils from '../common/storageUtils'
 
 	export default {
 		name: "home",
@@ -22,9 +23,12 @@
 			CommonFooter
 		},
 		mounted() {
-			// this.$axios.get('/mock/questions').then((res) => {
-			this.$axios.get('../../mock/questions').then((res) => {
-			  this.list = res.data;
+			this.$axios.get('/api/questions').then((res) => {
+			  let storage = storageUtils.getStorage('web_exercise_question');
+			  if (res.total > storage.total)
+			  	this.list = res.data;
+				else
+			  	this.list = storage.data;
 			})
 		}
 	}

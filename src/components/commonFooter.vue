@@ -19,6 +19,7 @@
 		position fixed
 		bottom 0
 		left 0
+		z-index 10000
 		border-top 1px solid #EBEEF5
 		background-color white
 		ul.footer-cont

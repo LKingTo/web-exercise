@@ -3,7 +3,7 @@ const utils = require('./utils');	//自定义工具模块
 
 module.exports = (app) => {
 	//监听http请求
-	app.get('/mock/questions', (rep, res) => {
+	app.use('/api/questions', (req, res) => {
 		//每次响应请求时读取mock data的json文件
 		//util.getJsonFile方法定义了如何读取json文件并解析成数据对象
 		let json = utils.getJsonFile('./questions.json');

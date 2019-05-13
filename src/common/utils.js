@@ -1,4 +1,4 @@
-module.exports = {
+const utils = {
 
 	/**
 	 * 生成uuid随机数
@@ -36,4 +36,14 @@ module.exports = {
 		}
 		return uuid.join('');
 	},
+
+	isNumber: function (value) {
+		return typeof value === "number";
+	},
+
+	isString: function (value) {
+		return typeof value === "string";
+	},
 }
+
+export default utils;
