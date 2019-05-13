@@ -4,7 +4,7 @@
 			el-collapse-item(v-for="(item, $index) in list", :key="$index")
 				template(slot="title")
 					.title {{item.question}}
-				.answer {{item.answer}}
+				.answer(v-html="item.answer")
 		common-footer
 </template>
 
@@ -25,10 +25,8 @@
 		mounted() {
 			this.$axios.get('/api/questions').then((res) => {
 			  let storage = storageUtils.getStorage('web_exercise_question');
-			  if (res.total > storage.total)
-			  	this.list = res.data;
-				else
-			  	this.list = storage.data;
+			  let storageData = storage && storage.data || [];
+			  this.list = res.data.concat(storageData);
 			})
 		}
 	}

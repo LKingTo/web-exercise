@@ -6,7 +6,7 @@ const utils = {
 	 * @param onlyNumber    是否只包括数字
 	 * @returns {string}
 	 */
-	uuid: function (len, onlyNumber) {
+	uuid(len, onlyNumber) {
 		var CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
 		var NUMBER_CHARS = '0123456789'.split('');
 		var chars = onlyNumber ? NUMBER_CHARS : CHARS, uuid = [];
@@ -37,11 +37,11 @@ const utils = {
 		return uuid.join('');
 	},
 
-	isNumber: function (value) {
+	isNumber(value) {
 		return typeof value === "number";
 	},
 
-	isString: function (value) {
+	isString(value) {
 		return typeof value === "string";
 	},
 }

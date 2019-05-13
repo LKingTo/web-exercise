@@ -10,6 +10,16 @@
 			el-button(type="primary", @click="submit()") 保存
 			el-button(@click="reset()") 重置
 		common-footer
+		el-dialog(
+			title="提示",
+			:visible.sync="showDialog",
+			width="90%",
+			center
+		)
+			span 保存失败，本地缓存已满！是否清空？
+			span.dialog-footer(slot="footer")
+				el-button(@click="showDialog = false") 取 消
+				el-button(type="primary", @click="onClickClearStorage") 确 定
 </template>
 
 <script>
@@ -27,7 +37,8 @@
 		data() {
 			return {
 				title: "",
-				content: ""
+				content: "",
+		  	showDialog: false
 			}
 		},
 		methods: {
@@ -42,6 +53,8 @@
 			},
 
 			reset() {
+				this.title = "";
+				this.content = "";
 				this.$refs.wEditor.reset();
 			},
 
@@ -52,22 +65,42 @@
 				// 	console.log('save', res);
 				// })
 				// 暂用localStorage存储，定期本地更新json
-				let storage = storageUtils.getStorage('web_exercise_question');
-				let list = storage && storage.data || [];
-				list.push({
-					id: utils.uuid(16),
-					index: list.length,
-					question: title,
-					answer: content,
+				this.$axios.get('/api/questions').then((res) => {
+					let storage = storageUtils.getStorage('web_exercise_question');
+					let list = storage && storage.data || [];
+					list.push({
+						id: utils.uuid(16),
+						index: res.data.length + list.length,
+						question: title,
+						answer: content,
+					});
+					let params = {
+						data: list,
+						total: list.length
+					};
+					// 校验storage的大小
+					let size = storageUtils.getStorageSize();
+					if (size >= 5|| list.length >= 10) {
+						// 通知更新json文件
+						this.showDialog = true;
+			  		let json = {
+			  			data: res.data.concat(list),
+							total: res.total + list.length
+						};
+			  		console.log(JSON.stringify(json));
+					} else {
+			  		storageUtils.setStorage('web_exercise_question', params);
+			  		// 通知首页更新
+			 			this.reset();
+					}
 				});
-				let json = {
-					data: list,
-					total: list.length
-				};
-				storageUtils.setStorage('web_exercise_question', json);
-				// 通知首页更新
-				this.reset();
-			}
+			},
+
+			onClickClearStorage() {
+				this.showDialog = false;
+				storageUtils.removeStorage('web_exercise_question');
+		  	this.reset();
+		  }
 		}
 	}
 </script>

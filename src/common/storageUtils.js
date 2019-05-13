@@ -18,7 +18,7 @@ const storageUtils = {
 	 * 判断是否支持local storage
 	 * @returns {boolean|*}
 	 */
-	isSupportLocalStorage: function () {
+	isSupportLocalStorage() {
 		return SUPPORT_LOCAL_STORAGE;
 	},
 
@@ -29,7 +29,7 @@ const storageUtils = {
 	 * @param timeoutSeconds    超时, 单位秒, 不指定时则默认永不超时
 	 * @returns {boolean}
 	 */
-	setStorage: function (key, value, timeoutSeconds) {
+	setStorage(key, value, timeoutSeconds) {
 		if (!SUPPORT_LOCAL_STORAGE) {
 			// if (config.debug)
 			// 	throw new Error(NOT_SUPPORT_LS_MSG);
@@ -51,7 +51,7 @@ const storageUtils = {
 	/**
 	 * 从local storage中读取数据
 	 */
-	getStorage: function (key) {
+	getStorage(key) {
 		if (!SUPPORT_LOCAL_STORAGE) {
 			// if (config.debug)
 			// 	throw new Error(NOT_SUPPORT_LS_MSG);
@@ -91,7 +91,7 @@ const storageUtils = {
 		return value;
 	},
 
-	removeStorage: function (key) {
+	removeStorage(key) {
 		if (!SUPPORT_LOCAL_STORAGE) {
 			// if (config.debug)
 			// 	throw new Error(NOT_SUPPORT_LS_MSG);
@@ -100,6 +100,22 @@ const storageUtils = {
 		}
 		localStorage.removeItem(key);
 		return true;
+	},
+
+	getStorageSize() {
+		if (!SUPPORT_LOCAL_STORAGE) {
+			console.error(NOT_SUPPORT_LS_MSG);
+			return false;
+		}
+		let size = 0;
+		for (let item in localStorage) {
+			if (localStorage.hasOwnProperty(item)) {
+				size += localStorage.getItem(item).length;
+			}
+		}
+		size = (size / 1024).toFixed(2);
+		console.log(`localStorage size: ${size}`);
+		return size
 	},
 };
 
