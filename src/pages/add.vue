@@ -11,12 +11,12 @@
 			el-button(@click="reset()") 重置
 		common-footer
 		el-dialog(
-			title="提示",
-			:visible.sync="showDialog",
-			width="90%",
-			center
+		title="提示",
+		:visible.sync="showDialog",
+		width="90%",
+		center
 		)
-			span 保存失败，本地缓存已满！是否清空？
+			span {{errorMsg}}
 			span.dialog-footer(slot="footer")
 				el-button(@click="showDialog = false") 取 消
 				el-button(type="primary", @click="onClickClearStorage") 确 定
@@ -27,6 +27,7 @@
 	import CommonFooter from '../components/commonFooter'
 	import storageUtils from '../common/storageUtils'
 	import utils from '../common/utils'
+	import wSql from '../rest/wSql'
 
 	export default {
 		name: "add",
@@ -38,7 +39,8 @@
 			return {
 				title: "",
 				content: "",
-		  	showDialog: false
+				errorMsg: "保存失败!",
+				showDialog: false
 			}
 		},
 		methods: {
@@ -61,46 +63,26 @@
 			save() {
 				let title = this.title;
 				let content = this.content;
-				// this.$axios.post('/api/questions/add', {title, content}).then((res) => {
-				// 	console.log('save', res);
-				// })
-				// 暂用localStorage存储，定期本地更新json
-				this.$axios.get('/api/questions').then((res) => {
-					let storage = storageUtils.getStorage('web_exercise_question');
-					let list = storage && storage.data || [];
-					list.push({
-						id: utils.uuid(16),
-						index: res.data.length + list.length,
-						question: title,
-						answer: content,
-					});
-					let params = {
-						data: list,
-						total: list.length
-					};
-					// 校验storage的大小
-					let size = storageUtils.getStorageSize();
-					if (size >= 5|| list.length >= 10) {
-						// 通知更新json文件
-						this.showDialog = true;
-			  		let json = {
-			  			data: res.data.concat(list),
-							total: res.total + list.length
-						};
-			  		console.log(JSON.stringify(json));
-					} else {
-			  		storageUtils.setStorage('web_exercise_question', params);
-			  		// 通知首页更新
-			 			this.reset();
-					}
-				});
+				let params = {
+					id: utils.uuid(16),
+					question: title,
+					answer: content,
+				};
+				wSql.addQuestion(this.$myDb, params).then((res) => {
+					this.$message.success('保存成功!');
+					this.reset();
+					// 通知首页更新
+				}, (err) => {
+					this.$message.error('保存失败!');
+					this.reset();
+				})
 			},
 
 			onClickClearStorage() {
 				this.showDialog = false;
 				storageUtils.removeStorage('web_exercise_question');
-		  	this.reset();
-		  }
+				this.reset();
+			}
 		}
 	}
 </script>

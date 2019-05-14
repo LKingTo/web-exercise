@@ -24,7 +24,12 @@ axios.interceptors.response.use((response) => {
 	return Promise.reject(error);
 });
 /** 设置Axios拦截器 end **/
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios;
+
+/** 设置webSQL数据库 start **/
+import WebSQL from './webSQL/webSQL'
+Vue.use(WebSQL.init);
+/** 设置webSQL数据库 end **/
 
 Vue.config.productionTip = false
 

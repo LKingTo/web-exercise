@@ -11,6 +11,7 @@
 <script>
 	import CommonFooter from '../components/commonFooter'
 	import storageUtils from '../common/storageUtils'
+	import wSql from '../rest/wSql'
 
 	export default {
 		name: "home",
@@ -23,10 +24,9 @@
 			CommonFooter
 		},
 		mounted() {
-			this.$axios.get('/api/questions').then((res) => {
-			  let storage = storageUtils.getStorage('web_exercise_question');
-			  let storageData = storage && storage.data || [];
-			  this.list = res.data.concat(storageData);
+			// 读取webSQL数据库
+			wSql.getQuestionsList(this.$myDb).then((res) => {
+				this.list = res && res.data;
 			})
 		}
 	}
