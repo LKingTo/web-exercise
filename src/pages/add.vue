@@ -5,21 +5,11 @@
 		v-model="title"
 		clearabl
 		)
-		w-editor(ref="wEditor")
+		w-editor(ref="wEditor", @content-change="contentOnChange")
 		.button-container
-			el-button(type="primary", @click="submit()") 保存
+			el-button(type="primary", @click="submit()", :disabled="disabled") 保存
 			el-button(@click="reset()") 重置
 		common-footer
-		el-dialog(
-		title="提示",
-		:visible.sync="showDialog",
-		width="90%",
-		center
-		)
-			span {{errorMsg}}
-			span.dialog-footer(slot="footer")
-				el-button(@click="showDialog = false") 取 消
-				el-button(type="primary", @click="onClickClearStorage") 确 定
 </template>
 
 <script>
@@ -35,6 +25,7 @@
 			WEditor,
 			CommonFooter
 		},
+		props: ['id', 'edit'],
 		data() {
 			return {
 				title: "",
@@ -43,14 +34,17 @@
 				showDialog: false
 			}
 		},
+		computed: {
+			disabled() {
+				return !this.title || !this.content;
+			}
+		},
 		methods: {
+			contentOnChange(data) {
+				this.content = data;
+			},
+
 			submit() {
-				const getContent = () => {
-					let html = this.$refs.wEditor.getContent();
-					console.log('get html', html);
-					this.content = html;
-				};
-				getContent();
 				this.save();
 			},
 
@@ -64,24 +58,41 @@
 				let title = this.title;
 				let content = this.content;
 				let params = {
-					id: utils.uuid(16),
 					question: title,
 					answer: content,
 				};
-				wSql.addQuestion(this.$myDb, params).then((res) => {
-					this.$message.success('保存成功!');
+				let promise, action;
+				if (this.edit) {
+					params.id = this.id;
+					action = '修改';
+					promise = wSql.editQuestion(this.$myDb, params);
+				} else {
+					params.id = utils.uuid(16);
+					action = '保存';
+					promise = wSql.addQuestion(this.$myDb, params);
+				}
+				promise.then((res) => {
+					this.$message.success(`${action}成功!`);
 					this.reset();
 					// 通知首页更新
 				}, (err) => {
-					this.$message.error('保存失败!');
+					this.$message.error(`${action}失败!`);
 					this.reset();
 				})
 			},
 
-			onClickClearStorage() {
-				this.showDialog = false;
-				storageUtils.removeStorage('web_exercise_question');
-				this.reset();
+			getQuestionDetail() {
+				wSql.getQuestion(this.$myDb, this.id).then((res) => {
+					this.title = res && res.question;
+					this.content = res && res.answer;
+					this.$refs.wEditor.setContent(this.content);
+				})
+			}
+		},
+
+		mounted() {
+			if (this.id) {
+				this.getQuestionDetail();
 			}
 		}
 	}

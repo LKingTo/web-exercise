@@ -19,7 +19,8 @@ const routes = new Router({
 		},{
 			name: 'add',
 			path: '/add',
-			component: Add
+			component: Add,
+			props: true
 		},
 	]
 })

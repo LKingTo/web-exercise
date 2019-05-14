@@ -32,6 +32,40 @@ const wSql = {
 				})
 			})
 		});
+	},
+
+	deleteQuestion(db, id) {
+		let data = {key: 'id', value: id};
+		return new Promise((resolve, reject) => {
+			WebSql.deleteDataFromTable(db, TABLE_QUESTIONS, data).then((res) => {
+				resolve({success: true});
+			}, (err) => {
+				reject(err);
+			})
+		})
+	},
+
+	getQuestion(db, id) {
+		let data = {key: 'id', value: id};
+		return new Promise((resolve, reject) => {
+			WebSql.getDataFromTable(db, TABLE_QUESTIONS, data).then((res) => {
+				resolve(res.rows[0]);
+			}, (err) => {
+				reject(err);
+			})
+		})
+	},
+
+	editQuestion(db, params) {
+		let data = Object.assign(params);
+		data.query = 'id';
+		return new Promise((resolve, reject) => {
+			WebSql.updateDataToTable(db, TABLE_QUESTIONS, data).then((res) => {
+				resolve({success: true});
+			}, (err) => {
+				reject(err);
+			})
+		})
 	}
 }
 

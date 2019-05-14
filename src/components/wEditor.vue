@@ -48,6 +48,7 @@
 					onchange: (html) => {
 						console.log(html);
 						this.editorContent = html;
+						this.$emit('content-change', html);
 					},
 					onchangeTimeout: 500,  // 单位 ms，默认200ms
 					uploadImgShowBase64: true, // 使用 base64 保存图片
@@ -59,13 +60,18 @@
 			},
 
 			getContent() {
-				let html = this.editor.txt.html();
-				return html;
+				return this.editor.txt.html();
+			},
+
+			setContent(html) {
+				this.editor.txt.html(html);
+				this.editorContent = html;
 			},
 
 			reset() {
 				// this.editor.txt.html('');
 				this.editor.txt.clear();
+				this.editorContent = '';
 			}
 		}
 	}

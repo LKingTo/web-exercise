@@ -40,6 +40,29 @@ const WebSql = {
 		});
 	},
 
+	updateDataToTable(db, tableName, data) {
+		let query = data.query.toUpperCase();
+		let keys = [], values = [];
+		delete data.query;
+		for (let key in data) {
+			if (data.hasOwnProperty(key)) {
+				(key !== 'id') && keys.push(key.toUpperCase());
+				values.push(data[key]);
+			}
+		}
+		let keysSql = keys.map((item) => {return item + ' = ?'}).join(',');
+		let updateDataSQL = 'UPDATE ' + tableName + ' SET ' + keysSql + ' WHERE ' + query + ' = ?';
+		return new Promise((resolve, reject) => {
+			db.transaction((ctx) => {
+				ctx.executeSql(updateDataSQL, values, (ctx, result) => {
+					resolve(result);
+				}, (tx, error) => {
+					reject({error: error.message});
+				});
+			});
+		});
+	},
+
 	getAllDataFromTable(db, tableName) {
 		let selectSQL = 'SELECT * FROM ' + tableName;
 		return new Promise((resolve, reject) => {
@@ -53,11 +76,13 @@ const WebSql = {
 		});
 	},
 
-	getDataFromTable(db, tableName, name) {
-		let selectSQL = 'SELECT * FROM ' + tableName + ' WHERE NAME = ?';
+	getDataFromTable(db, tableName, data) {
+		let key = data.key.toUpperCase();
+		let value = data.value;
+		let selectSQL = 'SELECT * FROM ' + tableName + ' WHERE ' + key + ' = ?';
 		return new Promise((resolve, reject) => {
 			db.transaction(function (ctx) {
-				ctx.executeSql(selectSQL, [name], (ctx, result) => {
+				ctx.executeSql(selectSQL, [value], (ctx, result) => {
 					resolve(result);
 				}, (tx, error) => {
 					reject({error: error.message});
@@ -81,11 +106,13 @@ const WebSql = {
 		});
 	},
 
-	deleteDataFromTable(db, tableName, name) {
-		let deleteTableSQL = 'DELETE FROM ' + tableName + ' WHERE NAME = ?';
+	deleteDataFromTable(db, tableName, data) {
+		let key = data.key.toUpperCase();
+		let value = data.value;
+		let deleteTableSQL = 'DELETE FROM ' + tableName + ' WHERE ' + key + ' = ?';
 		return new Promise((resolve, reject) => {
 			db.transaction((ctx, result) => {
-				ctx.executeSql(deleteTableSQL, [name], (ctx, result) => {
+				ctx.executeSql(deleteTableSQL, [value], (ctx, result) => {
 					resolve(result);
 				}, (tx, error) => {
 					reject({error: error.message});
@@ -119,8 +146,8 @@ const WebSql = {
 				// 创建表
 				let tableName = 'questions';
 				let keysSql = 'id unique,_index int,question text,answer text';
+				// WebSql.deleteAllDataFromTable(db, tableName);
 				WebSql.createTable(db, tableName, keysSql).then((res) => {});
-				// WebSql.dropTable(db, tableName)
 			}
 		}
 	},
