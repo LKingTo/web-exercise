@@ -4,11 +4,13 @@
 			el-collapse-item(v-for="(item, $index) in list", :key="$index")
 				template(slot="title")
 					.title {{item.question}}
-				.answer
+				.expanded
 					.btn-container
 						el-button(type="primary", icon="el-icon-edit", circle, @click="editItem(item)")
 						el-button(type="danger", icon="el-icon-delete", circle, @click="deleteItem(item)")
-					.content(v-html="item.answer")
+					.content
+						.question Q：{{item.question}}
+						.answer(v-html="item.answer")
 		common-footer
 
 		el-dialog(
@@ -47,6 +49,7 @@
 			init() {
 				// 读取webSQL数据库
 				wSql.getQuestionsList(this.$myDb).then((res) => {
+					console.log(JSON.stringify(res));
 					this.list = res && res.data;
 				})
 			},
@@ -77,11 +80,17 @@
 </script>
 
 <style lang="stylus" scoped>
+	.container
+		padding-bottom 80px
+
 	.title
 		padding-left 8px
 		width 100%
+		white-space nowrap
+		overflow hidden
+		text-overflow ellipsis
 
-	.answer
+	.expanded
 		padding 8px
 		border-top 1px solid #EBEEF5
 		.btn-container
@@ -89,4 +98,7 @@
 			justify-content flex-end
 			padding-top 5px
 			padding-bottom 5px
+		.question
+			font-weight bold
+			margin-bottom 10px
 </style>

@@ -55,6 +55,8 @@
 					showLinkImg: false,	// 隐藏“网络图片”tab
 					// qiniu: true, // 上传图片到七牛云存储
 				};
+				// 关闭粘贴样式的过滤
+				editor.customConfig.pasteFilterStyle = false;
 				editor.create();
 				this.editor = editor;
 			},
