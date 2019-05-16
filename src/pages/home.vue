@@ -49,7 +49,6 @@
 			init() {
 				// 读取webSQL数据库
 				wSql.getQuestionsList(this.$myDb).then((res) => {
-					console.log(JSON.stringify(res));
 					this.list = res && res.data;
 				})
 			},
