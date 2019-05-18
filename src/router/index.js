@@ -22,10 +22,6 @@ const routes = new Router({
 			path: '/add',
 			component: Add,
 			props: true
-		},{
-			name: 'editorTest',
-			path: '/editorTest',
-			component: EditorTest,
 		},
 	]
 })
