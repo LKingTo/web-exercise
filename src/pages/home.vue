@@ -100,4 +100,6 @@
 		.question
 			font-weight bold
 			margin-bottom 10px
+		.answer img
+			width 100%
 </style>

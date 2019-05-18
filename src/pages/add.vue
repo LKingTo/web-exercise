@@ -5,7 +5,7 @@
 		v-model="title"
 		clearabl
 		)
-		w-editor(ref="wEditor", @content-change="contentOnChange")
+		v-q-editor(ref="vQEditor", @editor-content-change="contentOnChange")
 		.button-container
 			el-button(type="primary", @click="submit()", :disabled="disabled") 保存
 			el-button(@click="reset()") 重置
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	import WEditor from '../components/wEditor'
+	import VQEditor from '../components/vqEditorQn'
 	import CommonFooter from '../components/commonFooter'
 	import storageUtils from '../common/storageUtils'
 	import utils from '../common/utils'
@@ -22,7 +22,7 @@
 	export default {
 		name: "add",
 		components: {
-			WEditor,
+			VQEditor,
 			CommonFooter
 		},
 		props: ['id', 'edit'],
@@ -51,7 +51,7 @@
 			reset() {
 				this.title = "";
 				this.content = "";
-				this.$refs.wEditor.reset();
+				this.$refs.vQEditor.reset();
 			},
 
 			save() {
@@ -85,7 +85,7 @@
 				wSql.getQuestion(this.$myDb, this.id).then((res) => {
 					this.title = res && res.question;
 					this.content = res && res.answer;
-					this.$refs.wEditor.setContent(this.content);
+					this.$refs.vQEditor.setContent(this.content);
 				})
 			}
 		},

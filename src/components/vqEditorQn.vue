@@ -133,7 +133,7 @@
 			onEditorChange({quill, html, text}) {
 				console.log('editor change!', quill, html, text);
 				this.editorContent = html;
-				this.$emit('content-change', html);
+				this.$emit('editor-content-change', html);
 			},
 			/** v-quill-editor组件相关事件回调函数 end **/
 
