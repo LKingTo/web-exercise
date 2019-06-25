@@ -49,18 +49,7 @@
 			init() {
 				// 读取webSQL数据库
 				wSql.getQuestionsList(this.$myDb).then((res) => {
-					let data = res && res.data || [];
-					if (!data.length) {
-						// webSQL有效期失效则读取本地json数据
-						this.$axios.get('/api/questions').then((result) => {
-							this.list = result && result.data;
-							// 更新至webSQL数据库
-							this.list.forEach((item) => {
-								wSql.addQuestion(this.$myDb, item);
-							})
-						})
-					} else
-						this.list = data;
+					this.list = res && res.data;
 				})
 			},
 

@@ -1,7 +1,17 @@
 import Vue from 'vue'
 
+/**
+ * WebSQL 客户端数据库相关操作
+ */
 const WebSql = {
 
+	/**
+	 * 创建表
+	 * @param db
+	 * @param tableName
+	 * @param keysSql
+	 * @return {Promise<any>}
+	 */
 	createTable(db, tableName, keysSql) {
 		let createTableSQL = 'CREATE TABLE IF  NOT EXISTS ' + tableName +
 			' (' + keysSql + ')';
@@ -18,6 +28,13 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 插入数据（一条）
+	 * @param db
+	 * @param tableName
+	 * @param data
+	 * @return {Promise<any>}
+	 */
 	insertDataToTable(db, tableName, data) {
 		let keys = [], values = [], valuesSQL = '';
 		for (let key in data) {
@@ -40,6 +57,13 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 更新表数据
+	 * @param db
+	 * @param tableName
+	 * @param data
+	 * @return {Promise<any>}
+	 */
 	updateDataToTable(db, tableName, data) {
 		let query = data.query.toUpperCase();
 		let keys = [], values = [];
@@ -63,6 +87,12 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 获取表所有记录行
+	 * @param db
+	 * @param tableName
+	 * @return {Promise<any>}
+	 */
 	getAllDataFromTable(db, tableName) {
 		let selectSQL = 'SELECT * FROM ' + tableName;
 		return new Promise((resolve, reject) => {
@@ -76,6 +106,13 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 获取表指定行的数据
+	 * @param db
+	 * @param tableName
+	 * @param data
+	 * @return {Promise<any>}
+	 */
 	getDataFromTable(db, tableName, data) {
 		let key = data.key.toUpperCase();
 		let value = data.value;
@@ -91,6 +128,12 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 清空表数据
+	 * @param db
+	 * @param tableName
+	 * @return {Promise<any>}
+	 */
 	deleteAllDataFromTable(db, tableName) {
 		let deleteTableSQL = 'DELETE FROM ' + tableName;
 		return new Promise((resolve, reject) => {
@@ -106,6 +149,13 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 删除表的指定行
+	 * @param db
+	 * @param tableName
+	 * @param data
+	 * @return {Promise<any>}
+	 */
 	deleteDataFromTable(db, tableName, data) {
 		let key = data.key.toUpperCase();
 		let value = data.value;
@@ -121,6 +171,12 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 删除表
+	 * @param db
+	 * @param tableName
+	 * @return {Promise<any>}
+	 */
 	dropTable(db, tableName) {
 		let dropTableSQL = 'DROP TABLE ' + tableName;
 		return new Promise((resolve, reject) => {
@@ -136,13 +192,16 @@ const WebSql = {
 		});
 	},
 
+	/**
+	 * 初始化webSQL
+	 */
 	init() {
 		if (window.openDatabase) {
 			var db = window.openDatabase('webSql', '1.0', 'web-exercise', 10 * 1024 * 1024);
 			if (!db) {
 				console.log('创建webSQL数据库失败');
 			} else {
-				Vue.prototype.$myDb = db;
+				Vue.prototype.$myDb = db;  // 绑定到vue实例
 				// 创建表
 				let tableName = 'questions';
 				let keysSql = 'id unique,_index int,question text,answer text';

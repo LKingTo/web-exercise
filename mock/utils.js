@@ -5,5 +5,12 @@ module.exports = {
 	getJsonFile: (filePath) => {
 		let json = fs.readFileSync(path.resolve(__dirname, filePath), 'utf-8');
 		return JSON.parse(json);
+	},
+
+	setJsonFile: (filePath, json) => {
+		fs.writeFile(path.resolve(__dirname, filePath), json, (err) => {
+			if (err) throw err;
+			return console.log('SET JSON FILE: SUCESS!');
+		})
 	}
 }
