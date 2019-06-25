@@ -31,7 +31,7 @@ import WebSQL from './webSQL/webSQL'
 Vue.use(WebSQL.init);
 /** 设置webSQL数据库 end **/
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;	// 阻止启动生产消息
 
 /* eslint-disable no-new */
 new Vue({

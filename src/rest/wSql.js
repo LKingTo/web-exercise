@@ -23,7 +23,8 @@ const wSql = {
 	addQuestion(db, params) {
 		return WebSql.getAllDataFromTable(db, TABLE_QUESTIONS).then((allRes) => {
 			let total = allRes && allRes.rows && allRes.rows.length;
-			params._index = total + 1;
+			if (!params._index)
+				params._index = total + 1;
 			return new Promise((resolve, reject) => {
 				WebSql.insertDataToTable(db, TABLE_QUESTIONS, params).then((res) => {
 					resolve({success: true});
