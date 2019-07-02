@@ -1,28 +1,12 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '../pages/home'
-import Test from '../pages/test'
-import Add from '../pages/add'
+import VueRouter from 'vue-router'
+import RouterConfig from './modules'
+import CommonRouters from './common'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-const routes = new Router({
-	routes: [
-		{
-			name: 'home',
-			path: '/',
-			component: Home
-		},{
-			name: 'test',
-			path: '/test',
-			component: Test
-		},{
-			name: 'add',
-			path: '/add',
-			component: Add,
-			props: true
-		},
-	]
+const routes = new VueRouter({
+	routes: RouterConfig.concat(CommonRouters)
 })
 
 export default routes
