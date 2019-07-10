@@ -26,7 +26,6 @@
 </template>
 
 <script>
-	import CommonFooter from '../components/commonFooter'
 	import storageUtils from '../common/storageUtils'
 	import wSql from '../rest/wSql'
 
@@ -40,7 +39,7 @@
 			}
 		},
 		components: {
-			CommonFooter
+			'CommonFooter': () => import('@/components/commonFooter')
 		},
 		mounted() {
 			this.init();

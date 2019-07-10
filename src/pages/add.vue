@@ -13,8 +13,6 @@
 </template>
 
 <script>
-	import VQEditor from '../components/vqEditorQn'
-	import CommonFooter from '../components/commonFooter'
 	import storageUtils from '../common/storageUtils'
 	import utils from '../common/utils'
 	import wSql from '../rest/wSql'
@@ -22,8 +20,8 @@
 	export default {
 		name: "add",
 		components: {
-			VQEditor,
-			CommonFooter
+			'VQEditor': () => import('@/components/vqEditorQn'),
+			'CommonFooter': () => import('@/components/commonFooter')
 		},
 		props: ['id', 'edit'],
 		data() {

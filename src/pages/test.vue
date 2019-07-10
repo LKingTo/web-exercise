@@ -35,14 +35,13 @@
 </template>
 
 <script>
-	import CommonFooter from '../components/commonFooter'
 	import wSql from '../rest/wSql'
 
 	export default {
 		name: "test",
 		newList: null,
 		components: {
-			CommonFooter
+			'CommonFooter': () => import('@/components/commonFooter')
 		},
 		data() {
 			return {
